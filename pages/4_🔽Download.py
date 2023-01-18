@@ -22,11 +22,10 @@ radio = col2.radio("Which data do you want to download", options = ['Manually in
 # check what the user asked for
 if radio == 'Manually input data':
     if "df" not in st.session_state:
-        st.write("Please go to the calculator menu and come back!")    
+        st.write("**:red[No data to download!]**")    
     else:
         df = st.session_state['df']
         df = round(df, 2)
-        # st.dataframe((df.set_index('Quarry').style.format("{:.2f}")))
         AgGrid(df, columns_auto_size_mode=True, )
         st.caption("**:blue[This dataframe is interactive. You can scroll left-to-right, top-to-bottom, freez columns, and filter them. Please download the file before navigating to another manu. You will lose the data otherwise!]**")
 
@@ -44,7 +43,7 @@ if radio == 'Manually input data':
         st.caption(":red[Note that a default dataset, corresponding to the number of open slots, is downloaded if you don't insert values in the form or don't upload  a file]")
 elif radio == 'From uploaded file':
     if "df_up" not in st.session_state:
-        st.write("You have not uploaded data!")
+        st.write("**:red[You have not uploaded data!]**")
     else:
         df = st.session_state['df_up']
         df = round(df, 2)

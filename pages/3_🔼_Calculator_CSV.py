@@ -34,7 +34,7 @@ if percent_weight=="Lab Results (Weight)":
     the calculator will through an error.
     </div>
     """, unsafe_allow_html=True)
-    uploadfile = st.file_uploader("")
+    uploadfile = st.file_uploader("upload Your  file", label_visibility= 'collapsed')
 # Lets see if the data has problems or not. if it does have problems, then instruct the user to correct the data
 # else, proceed
     try:
@@ -73,9 +73,9 @@ if percent_weight=="Lab Results (Weight)":
         <div style = 'text-align: justify; color:red; font-weight: bold; font-size: 20px;'>
         Your  data has been successfully uploaded but has compatibility issues.
         Take a look at the sample file above and confirm that:</br>
-        😞 1. You are not using Percentage-based data.</br>
-        😞 2. The number of columns in the dataframe is correct.</br>
-        😞 3. The order of the dataframe is correct. </br>
+        😞 1. You are not using percentage-based data.</br>
+        😞 2. The number of columns in the dataframe is exaclty 10.</br>
+        😞 3. The order of the columns is correct. </br>
                              
         </div>
         """, unsafe_allow_html=True)
@@ -106,7 +106,7 @@ if percent_weight=="Lab Results (Percentage)":
             df = pd.read_csv(uploadfile)
             df.columns= ["Quarry", "gten", "lten", "lfifty", 'cce', "wph", "bph", 'tph','price']
             AgGrid(df.round(1), fit_columns_on_grid_load=True, columns_auto_size_mode=True)
-            st.caption("**:red[Here are the first few rows of your data]**")
+            # st.caption("**:red[Here are the first few rows of your data]**")
 
         # adding  columns with new calculations
             df["Zero%_eff"] = df.gten
@@ -134,9 +134,9 @@ if percent_weight=="Lab Results (Percentage)":
         <div style = 'text-align: justify; color:red; font-weight: bold; font-size: 20px;'>
         Your  data has been successfully uploaded but has compatibility issues.
         Take a look at the sample file above and confirm that:</br>
-        😞 1. You are not using Percentage-based data.</br>
-        😞 2. The number of columns in the dataframe is correct.</br>
-        😞 3. The order of the dataframe is correct. </br>
+        😞 1. You are not using weight-based data.</br>
+        😞 2. The number of columns in the dataframe is exactly 9.</br>
+        😞 3. The order of the columns is correct. </br>
                              
         </div>
         """, unsafe_allow_html=True)
@@ -146,14 +146,14 @@ if percent_weight=="Lab Results (Percentage)":
 try:
     @st.cache
     def graph_h():
-        if df.shape[0]>5:
-            eff_h = 5+(df.shape[0]-5)*0.45
+        if df.shape[0]>1:
+            eff_h = 5+(df.shape[0]-5)*0.46
             others = 2+(df.shape[0]-2)*0.15
             rotation = 0
             data_labels = 'edge'
             return eff_h, others, rotation, data_labels
         else:
-            return 5,  2, 0, 'edge'
+            return 4,  1, 0, 'edge'
     eff_h, others, rotation, data_labels= graph_h()
 
 
@@ -185,7 +185,7 @@ try:
     ax3.set_xlim((0, 100))
     ax3.set_ylabel(None)
     ax3.set_xlabel(None)
-    ax3.text(0.95, 0.18+eff_h*0.012, "RNV (100%)", rotation =270, transform= ax3.transAxes)
+    ax3.text(0.95, 0.08+eff_h*0.012, "RNV (100%)", rotation =270, transform= ax3.transAxes)
     ax3.bar_label(Tplot.containers[0],fmt="%.2f", rotation = 0)
     ax3.set_xlabel("", fontsize = 14)
     ax3.axes.xaxis.set_visible(False)

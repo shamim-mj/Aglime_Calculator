@@ -44,19 +44,20 @@ st.markdown("<h4 style='background-color: #0033A0;text-align: center; color: 	wh
 st.markdown(
 """<div style="text-align: justify;">
 All rights reserved. </br>
-This web application was developed by <a href = 'https://www.linkedin.com/in/mohammad-jan-shamim-693136112/'>Mohammad Shamim</a>, and Robbie Williams in Henderson, Kentucky, USA.</br>
-You can perfom your calculation either by manually inserting values into the cells in the "Calculator Manual" menu or by uploading the values in a CSV file in the "Calculator CSV" menu. 
+<span style = "color: red;"> Disclaimer: </span>This open source web application was developed by <a href = 'https://www.linkedin.com/in/mohammad-jan-shamim-693136112/'>Mohammad Shamim</a> and Robbie Williams in Henderson, Kentucky, USA.</br>
+It comes with absolutely no warranty and the authors accept no liability. You are welcome to distribute it for scientific uses following the authors' consent.</br>
+You can perform calculations either by manually inserting values into cells in the "Calculator Manual" menu or by uploading the values in a CSV file in the "Calculator CSV" menu. 
 The manual form allows up to five lime sources calculations. 
-Uploading an CSV file allows an unlimited number of lime sources calculations. You can choose your favorite color for the charts from over 100 color palletes in the "Setting" menu.</br>
-Be sure to check boxes/toggle buttons for desired calculations as graphs. 
+Uploading a CSV file allows an unlimited number of lime sources calculations. You can choose your favorite color for the charts from over 100 color palettes in the "Setting" menu.</br>
+Be sure to check boxes/toggle buttons for desired calculations. 
 This web app uses Sikora-2 buffer for determining the quantity and cost of lime to be applied in an acre. </br>
-We are greatly indebted to His Excellency <a href =' https://pss.ca.uky.edu/person/frank-sikora'>Dr. Frank Sikora</a>, 
-Adjunct Associate Professor and Director of Laboratories and Soils Program Regulatory Services, the University of  Kentucky, USA, for his invaluable input in this Web App. </br>
+We are greatly indebted to <a href =' https://pss.ca.uky.edu/person/frank-sikora'>Dr. Frank Sikora</a>, 
+Regulatory Services, the University of Kentucky, USA, for his invaluable input in this Web App. </br>
 Should you have any quesions and suggestions, please do not hesitate to contact us. </br>
 </br>
 <span style = 'color:blue; font-weight: bold'>Read more...</span>
 </br>
-    <a href = 'http://www2.ca.uky.edu/agcomm/pubs/id/id163/id163.pdf'> Agicultural Lime Recommendation Based on Lime Quality </a> </br>
+    <a href = 'http://www2.ca.uky.edu/agcomm/pubs/id/id163/id163.pdf'> Agricultural Lime Recommendation Based on Lime Quality </a> </br>
     <a href = "https://www.rs.uky.edu/soil/technical_info/">Rock Quarry Lime Reports - University of Kentucky</a>
 </div>
     """, unsafe_allow_html=True)

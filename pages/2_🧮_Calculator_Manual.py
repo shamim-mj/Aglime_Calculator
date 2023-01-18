@@ -32,31 +32,33 @@ percent_weight = option_menu(None, ["Lab Results (Weight)", "Lab Results (Percen
     }
 )
 
-st.markdown("<h5 style='text-align: center; color: blue;'>" "</h5>", unsafe_allow_html=True)
+# st.markdown("<h5 style='text-align: center; color: blue;'>" "</h5>", unsafe_allow_html=True)
 
 # Lets loop through the columns
 if percent_weight =="Lab Results (Weight)":
     f_container = st.container() # the reason for using container is to give a nice looking style to the title of samples
     samp_cont1, samp_cont2 = f_container.columns([1, 3])
-    samp_cont1.markdown("<h5 style='text-align: center; color: blue;'>" "</h5>", unsafe_allow_html=True)
+    # samp_cont1.markdown("<h5 style='text-align: center; color: blue;'>" "</h5>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align: center; color: white; background-color: #0033A0;'>Lime Data</h4>", unsafe_allow_html=True)
     samp_cont1.markdown("<h5 style='text-align: center; color: white; background-color: #0033A0;'># Samples</h5>", unsafe_allow_html=True)
-    ncol = samp_cont1.number_input("# Sample", 1, 5, 2, label_visibility='collapsed')
+    ncol = samp_cont1.number_input("# Sample", 1, 5, 1, label_visibility='collapsed')
     cols = st.columns(ncol)
+    step = 1e-1
     for i, x in enumerate(cols):
-        quarries[i]= x.text_input('**Lime Source:**', value = f'Sample {i+1}',key = f"q_{i}_name")
-        initial[i] = x.number_input('**Initial Amount (g)**: ', value = 100.00, key = f"q_{i}_initial", format="%.2f")
-        gten[i] = x.number_input('**Amount > #10 (g)**: ', value = 10.00, key = f"q_{i}_10", format="%.2f")
-        lfifty[i] = x.number_input('**Amount < #50 (g):**', value = 60.00, key = f"q_{i}_50", format="%.2f")
-        CCE[i] = x.number_input("**Culcium Carbonate Equivalent (CCE):** ", value = 90.0, key = f'cce{i}', format="%.1f")
-        Price[i] = x.number_input("**Price ($/ton)**", value = 20.0, key = f'price{i}', format="%.1f")
+        st.session_state[f'Sample {i+1}'] = f'Sample {i+1}'
+        quarries[i]= x.text_input('**Lime Source:**', placeholder = st.session_state[f'Sample {i+1}'], key = f"q_{i}_name")
+        initial[i] = x.number_input('**Initial Amount (g)**: ', value = 100.00, step = step ,key = f"q_{i}_initial", format="%.2f")
+        gten[i] = x.number_input('**Amount > #10 (g)**: ', value = 10.00, step = step ,key = f"q_{i}_10", format="%.2f")
+        lfifty[i] = x.number_input('**Amount < #50 (g):**', value = 60.00, step = step ,key = f"q_{i}_50", format="%.2f")
+        CCE[i] = x.number_input("**Culcium Carbonate Equivalent (CCE):** ", value = 90.0, step = step ,key = f'cce{i}', format="%.1f")
+        Price[i] = x.number_input("**Price ($/ton)**", value = 20.0, step = step ,key = f'price{i}', format="%.1f")
 # lest add soil data too
     st.markdown("<h4 style='text-align: center; color: white; background-color: #0033A0;'>Soil Data </h4>", unsafe_allow_html=True)
     s_container = st.container()
     c1, c2, c3= s_container.columns(3)
-    wph = c1.slider('**Soil Water pH:**', min_value=4.0, max_value=8.0, value=5.8, step=0.1, key='wph', format="%.1f")
-    bph = c2.slider('**Buffer pH (Sikora-2):**', min_value=4.0, max_value=8.0, value=6.5, step=0.1, key='bph', format="%.1f")
-    tph= c3.slider('**Target pH**', min_value=4.0, max_value=8.0, value=6.5, step=0.1, key='tph', format="%.1f")
+    wph = c1.slider('**Soil Water pH:**', min_value=4.0, max_value=8.0, value=5.9, step=0.1, key='wph', format="%.1f")
+    bph = c2.slider('**Buffer pH (Sikora-2):**', min_value=4.0, max_value=8.0, value=6.8, step=0.1, key='bph', format="%.1f")
+    tph= c3.slider('**Target pH**', min_value=4.0, max_value=8.0, value=6.4, step=0.1, key='tph', format="%.1f")
     # soilW = c4.slider('**Soil Weight (g):**',min_value=8.0, max_value=14.0, value=12.0, step=0.1, key='sw', format="%.1f")
 
     # This datafram is dynamic and therefore making the charts easy to plot
@@ -95,24 +97,26 @@ if percent_weight =="Lab Results (Weight)":
 if percent_weight == "Lab Results (Percentage)":
     f_container = st.container()
     samp_cont1, samp_cont2 = f_container.columns([1, 3])
-    samp_cont1.markdown("<h5 style='text-align: center; color: blue;'>" "</h5>", unsafe_allow_html=True)
+    # samp_cont1.markdown("<h5 style='text-align: center; color: blue;'>" "</h5>", unsafe_allow_html=True)
     st.markdown("<h4 style='text-align: center; color: white; background-color: #0033A0;'>Lime Data</h4>", unsafe_allow_html=True)
     samp_cont1.markdown("<h5 style='text-align: center; color: white; background-color: #0033A0;'># Samples</h5>", unsafe_allow_html=True)
-    ncol = samp_cont1.number_input("# Sample", 1, 5, 2, key = 'first', label_visibility='collapsed')
+    ncol = samp_cont1.number_input("# Sample", 1, 5, 1, key = 'first', label_visibility='collapsed')
     cols = st.columns(ncol)
+    step = 1e-1
     for i, x in enumerate(cols):
-        quarries[i]= x.text_input('**Lime Source:**', value = f'Sample {i+1}', key = f"q_{i}_name")
-        gten[i] = x.number_input('**% > #10:**', value = 10.00, key = f"q_{i}_10", format="%.2f")
-        lfifty[i] = x.number_input('**% < #50:**', value = 60.00, key = f"q_{i}_50", format="%.2f")
-        CCE[i] = x.number_input("**Culcium Carbonate Equivalent (CCE):**", value = 90.0, key = f'cce{i}', format="%.1f")
+        st.session_state[f'Sample {i+1}'] = f'Sample {i+1}'
+        quarries[i]= x.text_input('**Lime Source:**', placeholder = st.session_state[f'Sample {i+1}'], key = f"q_{i}_name")
+        gten[i] = x.number_input('**% > #10:**', value = 10.00, step = step ,key = f"q_{i}_10", format="%.2f")
+        lfifty[i] = x.number_input('**% < #50:**', value = 60.00, step = step ,key = f"q_{i}_50", format="%.2f")
+        CCE[i] = x.number_input("**Culcium Carbonate Equivalent (CCE):**", value = 90.0, step = step ,key = f'cce{i}', format="%.1f")
         Price[i] = x.number_input("**Price ($/ton):**", value = 20.0, key = f'price{i}', format="%.1f")
 
     st.markdown("<h4 style='text-align: center; color: white; background-color: #0033A0;'>Soil Data </h4>", unsafe_allow_html=True)
     s_container = st.container()
     c1, c2, c3= s_container.columns(3)
-    wph = c1.slider('**Soil Water pH:**', min_value=4.0, max_value=8.0, value=5.8, step=0.1, key='wph', format="%.1f")
-    bph = c2.slider('**Buffer pH (Sikora-2):**', min_value=4.0, max_value=8.0, value=6.5, step=0.1, key='bph', format="%.1f")
-    tph= c3.slider('**Target pH**', min_value=4.0, max_value=8.0, value=6.5, step=0.1, key='tph', format="%.1f")
+    wph = c1.slider('**Soil Water pH:**', min_value=4.0, max_value=8.0, value=5.9, step=0.1, key='wph', format="%.1f")
+    bph = c2.slider('**Buffer pH (Sikora-2):**', min_value=4.0, max_value=8.0, value=6.8, step=0.1, key='bph', format="%.1f")
+    tph= c3.slider('**Target pH**', min_value=4.0, max_value=8.0, value=6.4, step=0.1, key='tph', format="%.1f")
     # soilW = c4.slider('**Soil Weight (g):**',min_value=8.0, max_value=14.0, value=12.0, step=0.1, key='sw', format="%.1f")
 
     # This datafram is dynamic and therefore making the charts easy to plot
@@ -153,14 +157,14 @@ if percent_weight == "Lab Results (Percentage)":
     st.session_state['df'] = df # this is used in downnloads
 @st.cache
 def graph_h():
-    if df.shape[0]>5:
-        eff_h = 5+(df.shape[0]-5)*0.45
+    if df.shape[0]>1:
+        eff_h = 5+(df.shape[0]-5)*0.46
         others = 2+(df.shape[0]-2)*0.15
         rotation = 0
         data_labels = 'edge'
         return eff_h, others, rotation, data_labels
     else:
-        return 5,  2, 0, 'edge'
+        return 4,  1, 0, 'edge'
 eff_h, others, rotation, data_labels= graph_h()
 
 # check if pallete is in session_sate.
@@ -194,7 +198,7 @@ Tplot = sns.barplot(x = "Hund%_eff", y = 'Quarry', data=df, ax=ax3, palette=pall
 ax3.set_xlim((0, 100))
 ax3.set_ylabel(None)
 ax3.set_xlabel(None)
-ax3.text(0.95, 0.18+eff_h*0.012, "RNV (100%)", rotation =270, transform= ax3.transAxes)
+ax3.text(0.95, 0.08+eff_h*0.011, "RNV (100%)", rotation =270, transform= ax3.transAxes)
 ax3.bar_label(Tplot.containers[0],fmt="%.2f", rotation = 0)
 ax3.set_xlabel("", fontsize = 14)
 ax3.axes.xaxis.set_visible(False)
