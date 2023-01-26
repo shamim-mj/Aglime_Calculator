@@ -1,6 +1,11 @@
 
 import streamlit as st
 
+st.markdown(""" <style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style> """, unsafe_allow_html=True)
+
 contact_col1, contact_col2= st.columns(2)
 with contact_col1:
     contact_col1.markdown("<h4 style='background-color: #0033A0; text-align: center; color: 	white;'>Robbie Williams</h2>", unsafe_allow_html=True)

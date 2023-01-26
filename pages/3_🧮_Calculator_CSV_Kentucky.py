@@ -5,6 +5,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 from st_aggrid import AgGrid
+st.markdown(""" <style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style> """, unsafe_allow_html=True)
 
 #title
 st.markdown("<h2 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Upload a CSV File</h2>", unsafe_allow_html=True)
@@ -31,19 +35,20 @@ if percent_weight=="Lab Results (Weight)":
     <div style="text-align: justify;">
     <span style='color: #0033A0; font-weight: bold; '>Tips:</span>
     Your file must be a CSV file and should have columns as shown above. If the number and order of the columns are incorrect, 
-    the calculator will through an error.
+    the calculator will through an error. </br>Please keep in mind that soil water pH (wph), buffer pH (bph), and 
+    target pH (tph) must be the same for all samples. Here we assume various lime sources are calculated for the same soil.
     </div>
     """, unsafe_allow_html=True)
     uploadfile = st.file_uploader("upload Your  file", label_visibility= 'collapsed')
 # Lets see if the data has problems or not. if it does have problems, then instruct the user to correct the data
 # else, proceed
     try:
-            # Lets give a condition if the upload file exist or not. If it exists then make it read it. 
+                # Lets give a condition if the upload file exist or not. If it exists then make it read it. 
         if uploadfile is not None:
             st.success("**File uploaded successfully!**")
             df = pd.read_csv(uploadfile)
             df.columns= ["Quarry", "initial", "gten", "lten", "lfifty", 'cce','wph', 'bph', 'tph','price']
-            AgGrid(df.round(1), fit_columns_on_grid_load=True, columns_auto_size_mode=True)
+            AgGrid(df.round(1),  columns_auto_size_mode=True, theme='alpine')
             st.caption("**:red[Here are the first five rows of your data]**")
 
 
@@ -62,9 +67,9 @@ if percent_weight=="Lab Results (Weight)":
             part2  = (BPH -(1.1*SWPH)+1.47)
             part3 = 13.75/SW
             ELR = part1/part2*part3
-            cffa = [(3.62 - (0.734*ELR)) if ELR <=3 else 1.42][0]
+            cffa = ELR.map(lambda x: (3.62 - (0.734*x) if x <= 3 else x==1.42))
             pure_lime = cffa*ELR
-            df['Bulk_Rec'] = pure_lime/df.RNV*100 if TPH>SWPH else df.RNV *0
+            df['Bulk_Rec'] = pure_lime/df.RNV*100 if TPH[0]>SWPH[0] else df.RNV *0
             df['Cost'] = df.Bulk_Rec * df.price
             df_up = df.copy()
             st.session_state['df_up'] = df_up
@@ -76,7 +81,7 @@ if percent_weight=="Lab Results (Weight)":
         😞 1. You are not using percentage-based data.</br>
         😞 2. The number of columns in the dataframe is exaclty 10.</br>
         😞 3. The order of the columns is correct. </br>
-                             
+                                
         </div>
         """, unsafe_allow_html=True)
 
@@ -93,7 +98,8 @@ if percent_weight=="Lab Results (Percentage)":
     <div style="text-align: justify;">
     <span style='color: #0033A0; font-weight: bold;'>Tips:</span>
     Your file must be a CSV file and should have columns as shown above. If the number and order of the columns are incorrect, 
-    the calculator will through an error.
+    the calculator will through an error. </br>Please keep in mind that soil water pH (wph), buffer pH (bph), and 
+    target pH (tph) must be the same for all samples. Here we assume various lime sources are calculated for the same soil.
     </div>
     """, unsafe_allow_html=True)
     uploadfile = st.file_uploader("")
@@ -105,7 +111,7 @@ if percent_weight=="Lab Results (Percentage)":
             st.success("**File uploaded successfully!**")
             df = pd.read_csv(uploadfile)
             df.columns= ["Quarry", "gten", "lten", "lfifty", 'cce', "wph", "bph", 'tph','price']
-            AgGrid(df.round(1), fit_columns_on_grid_load=True, columns_auto_size_mode=True)
+            AgGrid(df.round(1), columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
             # st.caption("**:red[Here are the first few rows of your data]**")
 
         # adding  columns with new calculations
@@ -113,18 +119,18 @@ if percent_weight=="Lab Results (Percentage)":
             df['Fifty%_eff'] = (df.lten-df.lfifty)
             df['Hund%_eff'] = df.lfifty
             df["RNV"] = df.cce/100.00*(((df.lten-df.lfifty)/2.0)+df.lfifty)
-            SWPH =df.wph[0]
-            BPH = df.bph[0]
-            TPH = df.tph[0]
+            SWPH =df.wph
+            BPH = df.bph
+            TPH = df.tph
             SW  = 12
             RNV = df.RNV
             part1 = -1.1 *(TPH-SWPH)*(BPH-7.55)
             part2  = (BPH -(1.1*SWPH)+1.47)
             part3 = 13.75/SW
             ELR = part1/part2*part3 #Equation LR
-            cffa = (3.62 - (0.734*ELR)) if ELR <=3 else 1.42
-            pure_lime = cffa*ELR 
-            df['Bulk_Rec'] = pure_lime/df.RNV*100 if TPH > SWPH else df.RNV * 0
+            cffa = ELR.map(lambda x: (3.62 - (0.734*x) if x <= 3 else x==1.42))
+            pure_lime = cffa*ELR
+            df['Bulk_Rec'] = pure_lime/df.RNV*100 if TPH[0]>SWPH[0] else df.RNV *0
             df['Cost'] = df.Bulk_Rec * df.price
             df_up = df.copy()
             st.session_state['df_up'] = df_up
@@ -137,12 +143,12 @@ if percent_weight=="Lab Results (Percentage)":
         😞 1. You are not using weight-based data.</br>
         😞 2. The number of columns in the dataframe is exactly 9.</br>
         😞 3. The order of the columns is correct. </br>
-                             
-        </div>
-        """, unsafe_allow_html=True)
+                            
+    </div>
+    """, unsafe_allow_html=True)
 # Lets see if the data has problems or not. if it does have problems, then instruct the user to correct the data
 # else, proceed
-
+st.write("___")
 try:
     @st.cache
     def graph_h():
@@ -161,96 +167,96 @@ try:
         pallete = "Dark2"
     else:
         pallete = st.session_state['pallete']
-    fig,(ax1, ax2, ax3) = plt.subplots(3, 1, figsize = (7, eff_h), sharex=True, gridspec_kw={'hspace':0.15})
-    Fplot = sns.barplot(x = "Zero%_eff", y = 'Quarry', data=df, ax=ax1, palette=pallete)
-    ax1.set_ylabel(None)
-    ax1.set_xlabel(None)
-    ax1.axes.xaxis.set_visible(False)
-    ax1.text(0.45, -0.11, s="#10 Seive", transform = ax1.transAxes)
-    ax1.text(0.95, 0.18+eff_h*0.012, "RNV (0%)", rotation =270, transform= ax1.transAxes)
-    ax1.bar_label(Fplot.containers[0], fmt="%.2f", rotation =0)
-    ax1.set_title("Lime Fineness (%)", fontsize = 18)
+    tab1, tab2= st.tabs(["**Lime Quality**", "**Lime Amount and Cost**"])   
+    with tab1:
+        st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime Quality</h5>", unsafe_allow_html=True)
+        st.write("___")
+        fig,(ax1, ax2, ax3) = plt.subplots(3, 1, figsize = (7, eff_h), sharex=True, gridspec_kw={'hspace':0.19})
+        Fplot = sns.barplot(x = "Zero%_eff", y = 'Quarry', data=df, ax=ax1, palette=pallete)
+        ax1.set_ylabel(None)
+        ax1.set_xlabel(None)
+        ax1.axes.xaxis.set_visible(False)
+        ax1.text(0.45, -0.13, s="#10 Seive", transform = ax1.transAxes)
+        ax1.text(0.95, 0.18+eff_h*0.012, "RNV (0%)", rotation =270, transform= ax1.transAxes, fontsize=8)
+        ax1.bar_label(Fplot.containers[0], fmt="%.2f", rotation =0)
+        ax1.set_title("Lime Fineness (%)", fontsize = 18)
 
 
-    Splot =sns.barplot(x = "Fifty%_eff", y = 'Quarry', data=df, ax=ax2, palette=pallete)
-    ax2.set_ylabel(None)
-    ax2.set_xlabel(None)
-    ax2.axes.xaxis.set_visible(False)
-    ax2.text(0.45, -0.11, s="#50 Seive", transform = ax2.transAxes)
-    ax2.text(0.95, 0.18+eff_h*0.012, "RNV (50%)", rotation =270, transform= ax2.transAxes)
-    ax2.bar_label(Splot.containers[0], fmt="%.2f", rotation = 0)
+        Splot =sns.barplot(x = "Fifty%_eff", y = 'Quarry', data=df, ax=ax2, palette=pallete)
+        ax2.set_ylabel(None)
+        ax2.set_xlabel(None)
+        ax2.axes.xaxis.set_visible(False)
+        ax2.text(0.45, -0.13, s="#50 Seive", transform = ax2.transAxes)
+        ax2.text(0.95, 0.18+eff_h*0.012, "RNV (50%)", rotation =270, transform= ax2.transAxes, fontsize=8)
+        ax2.bar_label(Splot.containers[0], fmt="%.2f", rotation = 0)
 
 
-    Tplot = sns.barplot(x = "Hund%_eff", y = 'Quarry', data=df, ax=ax3, palette=pallete)
-    ax3.set_xlim((0, 100))
-    ax3.set_ylabel(None)
-    ax3.set_xlabel(None)
-    ax3.text(0.95, 0.08+eff_h*0.012, "RNV (100%)", rotation =270, transform= ax3.transAxes)
-    ax3.bar_label(Tplot.containers[0],fmt="%.2f", rotation = 0)
-    ax3.set_xlabel("", fontsize = 14)
-    ax3.axes.xaxis.set_visible(False)
-    ax3.set_xticklabels([])
+        Tplot = sns.barplot(x = "Hund%_eff", y = 'Quarry', data=df, ax=ax3, palette=pallete)
+        ax3.set_xlim((0, 100))
+        ax3.set_ylabel(None)
+        ax3.set_xlabel(None)
+        ax3.text(0.95, 0.08+eff_h*0.012, "RNV (100%)", rotation =270, transform= ax3.transAxes, fontsize=8)
+        ax3.bar_label(Tplot.containers[0],fmt="%.2f", rotation = 0)
+        ax3.set_xlabel("", fontsize = 14)
+        ax3.axes.xaxis.set_visible(False)
+        ax3.set_xticklabels([])
 
-    rect = plt.Rectangle(
-        # (lower-left corner), width, height
-        (0.1232, 0.11), 0.776, 0.77, fill=False, color="k", lw=1, 
-        zorder=1000, transform=fig.transFigure, figure=fig
-    )
-    fig.patches.extend([rect]);
+        rect = plt.Rectangle(
+            # (lower-left corner), width, height
+            (0.1232, 0.11), 0.776, 0.77, fill=False, color="k", lw=1, 
+            zorder=1000, transform=fig.transFigure, figure=fig
+        )
+        fig.patches.extend([rect]);
 
-    # plot for RNV_______________
+        # plot for RNV_______________
 
-    fig1, ax4= plt.subplots(figsize = (7,others))
-    ax4.set_xlabel('RNV (%)')
-    ax4.set_ylabel(None)
-    ax4.set_title("Relative Neutralizaing Value (RNV (%))", fontsize = 18)
+        fig1, ax4= plt.subplots(figsize = (7,others))
+        ax4.set_xlabel('RNV (%)')
+        ax4.set_ylabel(None)
+        ax4.set_title("Relative Neutralizaing Value (RNV (%))", fontsize = 18)
 
-    FrPlot = sns.barplot(x='RNV', y = 'Quarry', data=df, ax=ax4, palette=pallete)
-    ax4.set_xlim((0, 100))
-    ax4.bar_label(FrPlot.containers[0], fmt="%.2f", rotation=0)
-    ax4.set_ylabel(None)
-    ax4.set_xlabel("", fontsize = 14)
-    ax4.axes.xaxis.set_visible(False)
-    ax4.set_xticklabels([])
-    st.pyplot(fig)
-    st.pyplot(fig1)
+        FrPlot = sns.barplot(x='RNV', y = 'Quarry', data=df, ax=ax4, palette=pallete)
+        ax4.set_xlim((0, 100))
+        ax4.bar_label(FrPlot.containers[0], fmt="%.2f", rotation=0)
+        ax4.set_ylabel(None)
+        ax4.set_xlabel("", fontsize = 14)
+        ax4.axes.xaxis.set_visible(False)
+        ax4.set_xticklabels([])
+        st.pyplot(fig)
+        st.pyplot(fig1)
 
 
-    # Plot for Bulk Recommendation of  Lime
-    st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
+    with tab2:
+        st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime Recommendation and Application Cost</h5>", unsafe_allow_html=True)
+        st.markdown("___")    
+        # Here I also want to give an option 
+        st.markdown("<h3 style='text-align: center; color: blue;'>""</h3>", unsafe_allow_html=True)
+        fig2, ax5 = plt.subplots(figsize =(7,others) )
+        ax5.set_ylabel(None)
+        ax5.set_title(f"Adjusted Lime Recommendation ($Tons\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH[0], 1)} to a target pH of {round(TPH[0],1)}", fontsize = 14)
 
-    st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime Recommendation and Application Cost</h5>", unsafe_allow_html=True)
+        FiPlot = sns.barplot(x='Bulk_Rec', y = 'Quarry', data=df, ax=ax5, palette=pallete)
+        ax5.bar_label(FiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
+        ax5.set_ylabel(None)
+        ax5.set_xlim([0, max(df.Bulk_Rec)+max(df.Bulk_Rec)*0.1]) # This syntax max the x axis length dynamic. Without it the data lable makes a problem
+        ax5.set_xlabel("", fontsize = 14)
+        ax5.axes.xaxis.set_visible(False)
+        ax5.set_xticklabels([])
+            
+            # Plot for Cost of  Lime
 
-    # Here I also want to give an option 
-    st.markdown("<h3 style='text-align: center; color: blue;'>""</h3>", unsafe_allow_html=True)
-    fig2, ax5 = plt.subplots(figsize =(7,others) )
-    ax5.set_ylabel(None)
-    ax5.set_title(f"Adjusted Lime Recommendation ($Tons\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH, 1)} to a target pH of {round(TPH,1)}", fontsize = 14)
+        fig3, ax6 = plt.subplots(figsize =(7,others) )
+        ax6.set_ylabel(None)
+        ax6.set_title(f"Total Cost of Lime Application ($\$\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH[0], 1)} to a target pH of {round(TPH[0],1)}", fontsize = 14)
 
-    FiPlot = sns.barplot(x='Bulk_Rec', y = 'Quarry', data=df, ax=ax5, palette=pallete)
-    ax5.bar_label(FiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
-    ax5.set_ylabel(None)
-    ax5.set_xlim([0, max(df.Bulk_Rec)+max(df.Bulk_Rec)*0.1]) # This syntax max the x axis length dynamic. Without it the data lable makes a problem
-    ax5.set_xlabel("", fontsize = 14)
-    ax5.axes.xaxis.set_visible(False)
-    ax5.set_xticklabels([])
-        
-        # Plot for Cost of  Lime
-
-    fig3, ax6 = plt.subplots(figsize =(7,others) )
-    ax6.set_ylabel(None)
-    ax6.set_title(f"Total Cost of Lime Application ($\$\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH, 1)} to a target pH of {round(TPH,1)}", fontsize = 14)
-
-    SiPlot = sns.barplot(x='Cost', y = 'Quarry', data=df, ax=ax6, palette=pallete)
-    ax6.bar_label(SiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
-    ax6.set_ylabel(None)
-    ax6.set_xlabel(None)
-    ax6.set_xlim([0, max(df.Cost)+max(df.Cost)*0.1])
-    ax6.axes.xaxis.set_visible(False)
-    ax6.set_xticklabels([])
-    st.pyplot(fig2)
-    st.pyplot(fig3)
+        SiPlot = sns.barplot(x='Cost', y = 'Quarry', data=df, ax=ax6, palette=pallete)
+        ax6.bar_label(SiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
+        ax6.set_ylabel(None)
+        ax6.set_xlabel(None)
+        ax6.set_xlim([0, max(df.Cost)+max(df.Cost)*0.1])
+        ax6.axes.xaxis.set_visible(False)
+        ax6.set_xticklabels([])
+        st.pyplot(fig2)
+        st.pyplot(fig3)
 except:
     pass

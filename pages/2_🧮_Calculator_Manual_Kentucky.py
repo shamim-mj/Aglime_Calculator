@@ -4,6 +4,11 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from streamlit_option_menu import option_menu
 
+st.markdown(""" <style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style> """, unsafe_allow_html=True)
+
 # Add a tile to the sources of the lime
 st.markdown("<h2 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime and Soil Data</h2>", unsafe_allow_html=True)
 
@@ -155,6 +160,7 @@ if percent_weight == "Lab Results (Percentage)":
     df['Bulk_Rec'] = pure_lime/df.RNV*100 if TPH > SWPH else df.RNV * 0
     df['Cost'] = df.Bulk_Rec * df.price
     st.session_state['df'] = df # this is used in downnloads
+st.write("___")
 @st.cache
 def graph_h():
     if df.shape[0]>1:
@@ -172,96 +178,101 @@ if "pallete" not in st.session_state:
     pallete = "Dark2"
 else:
     pallete = st.session_state['pallete']
-
+tab1, tab2= st.tabs(["**Lime Quality**", "**Lime Amount and Cost**"])
 # Draw the graphs
-fig,(ax1, ax2, ax3) = plt.subplots(3, 1, figsize = (7, eff_h), sharex=True, gridspec_kw={'hspace':0.15})
-Fplot = sns.barplot(x = "Zero%_eff", y = 'Quarry', data=df, ax=ax1, palette=pallete)
-ax1.set_ylabel(None)
-ax1.set_xlabel(None)
-ax1.axes.xaxis.set_visible(False)
-ax1.text(0.45, -0.11, s="#10 Seive", transform = ax1.transAxes)
-ax1.text(0.95, 0.18+eff_h*0.012, "RNV (0%)", rotation =270, transform= ax1.transAxes)
-ax1.bar_label(Fplot.containers[0], fmt="%.2f", rotation =0)
-ax1.set_title("Lime Fineness (%)", fontsize = 18)
+with tab1:
+    st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime Quality</h5>", unsafe_allow_html=True)
+    st.write("___")
+
+    fig,(ax1, ax2, ax3) = plt.subplots(3, 1, figsize = (7, eff_h), sharex=True, gridspec_kw={'hspace':0.19})
+    Fplot = sns.barplot(x = "Zero%_eff", y = 'Quarry', data=df, ax=ax1, palette=pallete)
+    ax1.set_ylabel(None)
+    ax1.set_xlabel(None)
+    ax1.axes.xaxis.set_visible(False)
+    ax1.text(0.45, -0.13, s="#10 Seive", transform = ax1.transAxes)
+    ax1.text(0.95, 0.18+eff_h*0.012, "RNV (0%)", rotation =270, transform= ax1.transAxes, fontsize=8)
+    ax1.bar_label(Fplot.containers[0], fmt="%.2f", rotation =0)
+    ax1.set_title("Lime Fineness (%)", fontsize = 18)
 
 
-Splot =sns.barplot(x = "Fifty%_eff", y = 'Quarry', data=df, ax=ax2, palette=pallete)
-ax2.set_ylabel(None)
-ax2.set_xlabel(None)
-ax2.axes.xaxis.set_visible(False)
-ax2.text(0.45, -0.11, s="#50 Seive", transform = ax2.transAxes)
-ax2.text(0.95, 0.18+eff_h*0.012, "RNV (50%)", rotation =270, transform= ax2.transAxes)
-ax2.bar_label(Splot.containers[0], fmt="%.2f", rotation = 0)
+    Splot =sns.barplot(x = "Fifty%_eff", y = 'Quarry', data=df, ax=ax2, palette=pallete)
+    ax2.set_ylabel(None)
+    ax2.set_xlabel(None)
+    ax2.axes.xaxis.set_visible(False)
+    ax2.text(0.45, -0.13, s="#50 Seive", transform = ax2.transAxes)
+    ax2.text(0.95, 0.18+eff_h*0.012, "RNV (50%)", rotation =270, transform= ax2.transAxes, fontsize=8)
+    ax2.bar_label(Splot.containers[0], fmt="%.2f", rotation = 0)
 
 
-Tplot = sns.barplot(x = "Hund%_eff", y = 'Quarry', data=df, ax=ax3, palette=pallete)
-ax3.set_xlim((0, 100))
-ax3.set_ylabel(None)
-ax3.set_xlabel(None)
-ax3.text(0.95, 0.08+eff_h*0.011, "RNV (100%)", rotation =270, transform= ax3.transAxes)
-ax3.bar_label(Tplot.containers[0],fmt="%.2f", rotation = 0)
-ax3.set_xlabel("", fontsize = 14)
-ax3.axes.xaxis.set_visible(False)
-ax3.set_xticklabels([])
+    Tplot = sns.barplot(x = "Hund%_eff", y = 'Quarry', data=df, ax=ax3, palette=pallete)
+    ax3.set_xlim((0, 100))
+    ax3.set_ylabel(None)
+    ax3.set_xlabel(None)
+    ax3.text(0.95, 0.08+eff_h*0.011, "RNV (100%)", rotation =270, transform= ax3.transAxes, fontsize=8)
+    ax3.bar_label(Tplot.containers[0],fmt="%.2f", rotation = 0)
+    ax3.set_xlabel("", fontsize = 14)
+    ax3.axes.xaxis.set_visible(False)
+    ax3.set_xticklabels([])
 
-rect = plt.Rectangle(
-    # (lower-left corner), width, height
-    (0.1232, 0.11), 0.776, 0.77, fill=False, color="k", lw=1, 
-    zorder=1000, transform=fig.transFigure, figure=fig
-)
-fig.patches.extend([rect]);
+    rect = plt.Rectangle(
+        # (lower-left corner), width, height
+        (0.1232, 0.11), 0.776, 0.77, fill=False, color="k", lw=1, 
+        zorder=1000, transform=fig.transFigure, figure=fig
+    )
+    fig.patches.extend([rect]);
 
-# plot for RNV_______________
+    # plot for RNV_______________
+    fig1, ax4= plt.subplots(figsize = (7,others))
+    ax4.set_xlabel('RNV (%)')
+    ax4.set_ylabel(None)
+    ax4.set_title("Relative Neutralizaing Value (RNV (%))", fontsize = 18)
 
-fig1, ax4= plt.subplots(figsize = (7,others))
-ax4.set_xlabel('RNV (%)')
-ax4.set_ylabel(None)
-ax4.set_title("Relative Neutralizaing Value (RNV (%))", fontsize = 18)
+    FrPlot = sns.barplot(x='RNV', y = 'Quarry', data=df, ax=ax4, palette=pallete)
+    ax4.set_xlim((0, 100))
+    ax4.bar_label(FrPlot.containers[0], fmt="%.2f", rotation=0)
+    ax4.set_ylabel(None)
+    ax4.set_xlabel("", fontsize = 14)
+    ax4.axes.xaxis.set_visible(False)
+    ax4.set_xticklabels([])
+    st.pyplot(fig)
+    st.pyplot(fig1)
 
-FrPlot = sns.barplot(x='RNV', y = 'Quarry', data=df, ax=ax4, palette=pallete)
-ax4.set_xlim((0, 100))
-ax4.bar_label(FrPlot.containers[0], fmt="%.2f", rotation=0)
-ax4.set_ylabel(None)
-ax4.set_xlabel("", fontsize = 14)
-ax4.axes.xaxis.set_visible(False)
-ax4.set_xticklabels([])
-st.pyplot(fig)
-st.pyplot(fig1)
-
-
+# st.write("___")
 # Plot for Bulk Recommendation of  Lime
-st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
-st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
+# st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
+# st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
+# st.markdown("<h3 style='text-align: center; color: blue;'>" "</h3>", unsafe_allow_html=True)
 
-st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime Recommendation and Application Cost</h5>", unsafe_allow_html=True)
+# st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime Recommendation and Application Cost</h5>", unsafe_allow_html=True)
+with tab2:
+    st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Lime Recommendation and Application Cost</h5>", unsafe_allow_html=True)
+    st.markdown("___")
+    # Here I also want to give an option 
+    st.markdown("<h3 style='text-align: center; color: blue;'>""</h3>", unsafe_allow_html=True)
+    fig2, ax5 = plt.subplots(figsize =(7,others) )
+    ax5.set_ylabel(None)
+    ax5.set_title(f"Adjusted Lime Recommendation ($Tons\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH, 1)} to a target pH of {round(TPH,1)}", fontsize = 14)
 
-# Here I also want to give an option 
-st.markdown("<h3 style='text-align: center; color: blue;'>""</h3>", unsafe_allow_html=True)
-fig2, ax5 = plt.subplots(figsize =(7,others) )
-ax5.set_ylabel(None)
-ax5.set_title(f"Adjusted Lime Recommendation ($Tons\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH, 1)} to a target pH of {round(TPH,1)}", fontsize = 14)
+    FiPlot = sns.barplot(x='Bulk_Rec', y = 'Quarry', data=df, ax=ax5, palette=pallete)
+    ax5.bar_label(FiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
+    ax5.set_ylabel(None)
+    ax5.set_xlim([0, max(df.Bulk_Rec)+max(df.Bulk_Rec)*0.1]) # This syntax max the x axis length dynamic. Without it the data lable makes a problem
+    ax5.set_xlabel("", fontsize = 14)
+    ax5.axes.xaxis.set_visible(False)
+    ax5.set_xticklabels([])
+        
+        # Plot for Cost of  Lime
 
-FiPlot = sns.barplot(x='Bulk_Rec', y = 'Quarry', data=df, ax=ax5, palette=pallete)
-ax5.bar_label(FiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
-ax5.set_ylabel(None)
-ax5.set_xlim([0, max(df.Bulk_Rec)+max(df.Bulk_Rec)*0.1]) # This syntax max the x axis length dynamic. Without it the data lable makes a problem
-ax5.set_xlabel("", fontsize = 14)
-ax5.axes.xaxis.set_visible(False)
-ax5.set_xticklabels([])
-    
-    # Plot for Cost of  Lime
+    fig3, ax6 = plt.subplots(figsize =(7,others) )
+    ax6.set_ylabel(None)
+    ax6.set_title(f"Total Cost of Lime Application ($\$\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH, 1)} to a target pH of {round(TPH,1)}", fontsize = 14)
 
-fig3, ax6 = plt.subplots(figsize =(7,others) )
-ax6.set_ylabel(None)
-ax6.set_title(f"Total Cost of Lime Application ($\$\ Acre^{-1}$)\nto raise soil water pH of {round(SWPH, 1)} to a target pH of {round(TPH,1)}", fontsize = 14)
-
-SiPlot = sns.barplot(x='Cost', y = 'Quarry', data=df, ax=ax6, palette=pallete)
-ax6.bar_label(SiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
-ax6.set_ylabel(None)
-ax6.set_xlabel(None)
-ax6.set_xlim([0, max(df.Cost)+max(df.Cost)*0.1])
-ax6.axes.xaxis.set_visible(False)
-ax6.set_xticklabels([])
-st.pyplot(fig2)
-st.pyplot(fig3)
+    SiPlot = sns.barplot(x='Cost', y = 'Quarry', data=df, ax=ax6, palette=pallete)
+    ax6.bar_label(SiPlot.containers[0], fmt="%.2f", rotation = rotation, label_type=data_labels)
+    ax6.set_ylabel(None)
+    ax6.set_xlabel(None)
+    ax6.set_xlim([0, max(df.Cost)+max(df.Cost)*0.1])
+    ax6.axes.xaxis.set_visible(False)
+    ax6.set_xticklabels([])
+    st.pyplot(fig2)
+    st.pyplot(fig3)

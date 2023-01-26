@@ -2,6 +2,7 @@
 import streamlit as st
 import matplotlib.pyplot as plt
 
+
 # configure the page
 st.set_page_config(
     page_title="Lime Calculator with Charts",
@@ -9,6 +10,21 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded"
 )
+
+padding = 0
+st.markdown(f""" <style>
+    .reportview-container .main .block-container{{
+        padding-top: {padding}rem;
+        padding-right: {padding}rem;
+        padding-left: {padding}rem;
+        padding-bottom: {padding}rem;
+    }} </style> """, unsafe_allow_html=True)
+
+st.markdown(""" <style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style> """, unsafe_allow_html=True)
+
 
 # This is a CSS styling that affects some part of the App.
 st.markdown(
@@ -50,8 +66,12 @@ You can perform calculations either by manually inserting values into cells in t
 The manual form allows up to five lime sources calculations. 
 Uploading a CSV file allows an unlimited number of lime sources calculations. You can choose your favorite color for the charts from over 100 color palettes in the "Setting" menu.</br>
 Be sure to check boxes/toggle buttons for desired calculations. 
-This web app uses Sikora-2 buffer for determining the quantity and cost of lime to be applied in an acre. </br>
-We are greatly indebted to <a href =' https://pss.ca.uky.edu/person/frank-sikora'>Dr. Frank Sikora</a>, 
+This web app uses two methods for determining the quantity and cost of lime to be applied in an acre. In the "Calculator Manual Kentucky" and "Calculator CSV Kentucky" menus, 
+Sikor-2 Buffer method is used. In the "Calculator Ohio State" menu, the Ohio State adopted method is used to determine the quantity and cost of lime. </br>
+</br>
+<span style = 'color:blue; font-weight: bold'>Excel Version: </span>You can download an <a href='https://github.com/shamim-mj/Aglime_Calculator_in_Excel.git'>Excel version</a> of the calculator here or from the download menu. </br>
+</br>
+<span style = 'color:blue; font-weight: bold'>Aknowledgement: </span>We are greatly indebted to <a href =' https://pss.ca.uky.edu/person/frank-sikora'>Dr. Frank Sikora</a>, 
 Regulatory Services, the University of Kentucky, USA, for his invaluable input in this Web App. </br>
 Should you have any quesions and suggestions, please do not hesitate to contact us. </br>
 </br>
@@ -69,3 +89,4 @@ img2 = plt.imread('Sieves1.jpg')
 image1.image(img2)
 image2.image(img1)
 st.caption("Photo Credit: Robbie Williams")
+

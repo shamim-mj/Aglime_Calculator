@@ -1,5 +1,10 @@
 import streamlit as st
 
+st.markdown(""" <style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+</style> """, unsafe_allow_html=True)
+
 color_cont1, color_cont2 = st.columns([1, 2])
 color_cont1.markdown("<h5 style='text-align: center; color: white; background-color: #0033A0;'>Choose color palette</h5>", unsafe_allow_html=True)
 
