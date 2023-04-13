@@ -77,7 +77,7 @@ if percent_weight == "Manual Analysis":
     df['Bulk_Rec'] = df.OYAR*df.recton
     df['Cost'] = df.Bulk_Rec * df.price
     st.session_state['df_IL'] = df
-    st.write(df)
+    #st.write(df)
 
     dfn = df.copy()
     st.markdown("___")
