@@ -194,7 +194,7 @@ with tab1:
     ax1.set_xlabel(None)
     ax1.axes.xaxis.set_visible(False)
     ax1.text(0.45, -0.13, s="#8 Seive", transform = ax1.transAxes)
-    ax1.text(0.95, 0.18+eff_h*0.012, "RNV (0%)", rotation =270, transform= ax1.transAxes, fontsize=8)
+    ax1.text(0.95, 0.18+eff_h*0.012, "RNV (0%)", rotation =270, transform= ax1.transAxes, fontsize=9)
     ax1.bar_label(Fplot.containers[0], fmt="%.2f", rotation =0)
     ax1.set_title("Lime Fineness (%)", fontsize = 18)
 
@@ -203,7 +203,7 @@ with tab1:
     ax2.set_xlabel(None)
     ax2.axes.xaxis.set_visible(False)
     ax2.text(0.45, -0.13, s="#20 Seive", transform = ax2.transAxes)
-    ax2.text(0.95, 0.18+eff_h*0.012, "RNV (20%)", rotation =270, transform= ax2.transAxes, fontsize=8)
+    ax2.text(0.95, 0.18+eff_h*0.012, "RNV (20%)", rotation =270, transform= ax2.transAxes, fontsize=9)
     ax2.bar_label(Splot.containers[0], fmt="%.2f", rotation =0)
 
 
@@ -212,7 +212,7 @@ with tab1:
     ax3.set_xlabel(None)
     ax3.axes.xaxis.set_visible(False)
     ax3.text(0.45, -0.13, s="#60 Seive", transform = ax3.transAxes)
-    ax3.text(0.95, 0.18+eff_h*0.012, "RNV (50%)", rotation =270, transform= ax3.transAxes, fontsize=8)
+    ax3.text(0.95, 0.18+eff_h*0.012, "RNV (60%)", rotation =270, transform= ax3.transAxes, fontsize=9)
     ax3.bar_label(Tplot.containers[0], fmt="%.2f", rotation = 0)
 
 
@@ -220,7 +220,7 @@ with tab1:
     ax4.set_xlim((0, 100))
     ax4.set_ylabel(None)
     ax4.set_xlabel(None)
-    ax4.text(0.95, 0.08+eff_h*0.011, "RNV (100%)", rotation =270, transform= ax4.transAxes, fontsize=8)
+    ax4.text(0.95, 0.08+eff_h*0.011, "RNV (100%)", rotation =270, transform= ax4.transAxes, fontsize=9)
     ax4.bar_label(Frplot.containers[0],fmt="%.2f", rotation = 0)
     ax4.set_xlabel("", fontsize = 14)
     ax4.axes.xaxis.set_visible(False)
@@ -298,8 +298,3 @@ with tab2:
     ax7.set_xticklabels([])
     st.pyplot(fig2)
     st.pyplot(fig3)
-# with tab3:
-#     st.markdown("<h5 style='background-color: #0033A0; font-size:35px; text-align: center; color: 	white;'>Calculated data</h5>", unsafe_allow_html=True)
-#     st.markdown("___")
-#     df = st.session_state['df_oh']
-#     AgGrid(round(df.loc[:,['Quarry','FI', "%_ENP", "t_ENP", "Bulk_Rec", "Cost"]], 2),  columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')

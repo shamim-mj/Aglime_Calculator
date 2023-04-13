@@ -23,10 +23,10 @@ time = datetime.datetime.now().time()
 # Since we have manual and uploaded data, here giving the user choice of downloading data
 st.markdown("<h3 style=' text-align: center; color: black;'>Which data do you want to download</h3>", unsafe_allow_html=True)
 col1, col2, col3 = st.columns(3)
-radio = col2.radio("Which data do you want to download", options = ['Manually input data', 'From uploaded file', 'Ohio State Data'], label_visibility='collapsed')
+radio = col2.radio("Which data do you want to download", options = ['Kentucky Manual', 'Kentucky CSV', 'Ohio', "Illinois"], label_visibility='collapsed')
 
 # check what the user asked for
-if radio == 'Manually input data':
+if radio == 'Kentucky Manual':
     if "df" not in st.session_state:
         st.write("**:red[No data to download!]**")    
     else:
@@ -59,7 +59,7 @@ if radio == 'Manually input data':
             mime = 'text/csv'
         )
         st.caption(":red[Note that a default dataset, corresponding to the number of open slots, is downloaded if you don't insert values in the form or don't upload  a file]")
-elif radio == 'From uploaded file':
+elif radio == 'Kentucky CSV':
     if "df_up" not in st.session_state:
         st.write("**:red[You have not uploaded data!]**")
     else:
@@ -81,9 +81,9 @@ elif radio == 'From uploaded file':
             ❣ Cost:                Application cost per acre
             </div>
             """, unsafe_allow_html = True)
-elif radio == "Ohio State Data":
+elif radio == "Ohio":
     if "df_oh" not in st.session_state:
-        st.write("**:red[You  have not done any calculations using Ohio State Method]**")
+        st.write("**:red[No data to download!]**")
     else:
         df = st.session_state['df_oh']
         df = round(df,2)
@@ -111,6 +111,42 @@ elif radio == "Ohio State Data":
             mime = 'text/csv'
         )
         st.caption(":red[Note that a default dataset, corresponding to the number of open slots, is downloaded if you don't insert values in the form or don't upload  a file]")
+    st.markdown('___')
+
+
+elif radio == "Illinois":
+    if "df_IL" not in st.session_state:
+        st.write("**:red[No data to download!]**")
+    else:
+        df = st.session_state['df_IL']
+        df = round(df,2)
+        AgGrid(round(df.loc[:,['Quarry', 'L8', 'l8', 'l30','l60', "TFEV","ENV" ,'Bulk_Rec', 'Cost']], 2),  columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        cbox = st.checkbox('Descriptions')
+        if cbox:
+            st.markdown("""
+            <div style ='text-aling: justify;'>
+            ❣ L8:          particles not passing through #8 (%) </br>
+            ❣ l8:          particles passing through #8 but not $30 (%) </br>
+            ❣ l30:         particles passing through #30 but not #60 (%) </br>
+            ❣ l60:         particles passing through #60 (%) </br>
+            ❣ TFEV:        Total Fineness Eff. Value (Fineness Index) </br>
+            ❣ ENV:         Effective Neutralizing Value (%) </br>
+            ❣ Bulk_Rec:    The final amount of lime to applied in an acre </br>
+            ❣ Cost:        Total cost (lime, delivery, and spreading)
+            </div>
+            """, unsafe_allow_html = True)
+        # Preparing data to download
+        df1 = df.to_csv().encode('utf-8')
+
+        st.markdown("### **:blue[Download!]**")
+        st.download_button(
+            key = 'b_csv',
+            label = "Download data as csv file",
+            data = df1,
+            file_name = f"Lime_particle_analysis_[{date}]_[{time}].csv",
+            mime = 'text/csv'
+        )
+        st.caption(":red[Note that a default dataset, corresponding to the number of open slots, is downloaded if you don't insert values in the form or don't upload  a file]")
 st.markdown('___')
 
 
@@ -119,13 +155,4 @@ st.markdown("<h3 style=' text-align: center; background-color: #0033A0;  color: 
 st.markdown("<h4 style=' text-align: center; background-color: white;  color: black;'>""</h4>", unsafe_allow_html=True)
 
 st.markdown("<a href='https://github.com/shamim-mj/Aglime_Calculator_in_Excel.git'> Click to download an Excel version of the Calculator!</a>", unsafe_allow_html = True)
-
-with st.expander("**Read Instruction**"):
-    st.write("The link will take you to our github webpage where the following window will appear")
-    img1 = plt.imread('Excel1.jpg')
-    st.image(img1)
-    st.write("Clicking on 'Lime Calculator Excel.xlsx' will open the follwing window")
-    img2 = plt.imread('Excel2.jpg')
-    st.image(img2)
-    st.write("Click the download button. Woohoo, the file will  start downloading")
     
