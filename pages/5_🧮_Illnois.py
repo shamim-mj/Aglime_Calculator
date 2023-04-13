@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import streamlit as st
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -62,6 +61,7 @@ if percent_weight == "Manual Analysis":
     p = 0.01
     df = pd.DataFrame({"Quarry": [i for i in quarries.values()],
         "L8": [100 - i for i in l8.values()],
+        "ll8": [i for i in l8.values()],
         "l8":[i-j for i, j in zip(l8.values(), l30.values())],
         "l30": [i-j for i,j in zip(l30.values(), l60.values())],
         "l60": [i for i in l60.values()],
@@ -71,13 +71,13 @@ if percent_weight == "Manual Analysis":
         'recton': [i for i in recton.values()],
         'price': [i+j+k for i,j,k in zip(lime_cost.values(), delivery_cost.values() ,spreading_cost.values())]
     })
-    df['TFEV'] = (1-df.l8)*5*p+ (df.l8-df.l30)*20*p + (df.l30-df.l60)*50*p+ df.l60*100*p
+    df['TFEV'] = (1-df.ll8*p)*5 + (df.l8*p)*20 + (df.l30*p)*50+ df.l60*p*100
     df['ENV'] = df.TFEV*df.cce
     df['OYAR'] = 46.35/df.ENV
     df['Bulk_Rec'] = df.OYAR*df.recton
     df['Cost'] = df.Bulk_Rec * df.price
     st.session_state['df_IL'] = df
-    #st.write(df)
+    st.write(df)
 
     dfn = df.copy()
     st.markdown("___")

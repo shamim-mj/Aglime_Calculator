@@ -111,7 +111,6 @@ elif radio == "Ohio":
             mime = 'text/csv'
         )
         st.caption(":red[Note that a default dataset, corresponding to the number of open slots, is downloaded if you don't insert values in the form or don't upload  a file]")
-    st.markdown('___')
 
 
 elif radio == "Illinois":
