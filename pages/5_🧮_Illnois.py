@@ -48,9 +48,9 @@ if percent_weight == "Manual Analysis":
         st.session_state[f'Sample {i+1}'] = f'Sample {i+1}'
         quarries[i]= x.text_input('**Lime Source:**', placeholder = st.session_state[f'Sample {i+1}'], key = f"q_{i}_name")
         #initial[i] = x.number_input('**Initial Amount (g)**: ', value = 550.00, step = step ,key = f"q_{i}_initial", format="%.2f")
-        l8[i] = x.number_input('**% < #8 (g)**: ', value = 85.00, step = step ,key = f"q_{i}_8", format="%.2f")
-        l30[i] = x.number_input('**% < #30 (g):**', value = 35.00, step = step ,key = f"q_{i}_20", format="%.2f")
-        l60[i] = x.number_input('**% < #60 (g):**', value = 22.00, step = step ,key = f"q_{i}_60", format="%.2f")
+        l8[i] = x.number_input('**% < #8:** ', value = 85.00, step = step ,key = f"q_{i}_8", format="%.2f")
+        l30[i] = x.number_input('**% < #30:**', value = 35.00, step = step ,key = f"q_{i}_20", format="%.2f")
+        l60[i] = x.number_input('**% < #60:**', value = 22.00, step = step ,key = f"q_{i}_60", format="%.2f")
         #CCE[i] = x.number_input("**OYAR (t/a):** ", value = 1.5, step = step ,key = f'cce{i}', format="%.1f")
         #wetw[i] = x.number_input("**Wet Weight (g):** ", value = 600.0, step = step ,key = f'wetw{i}', format="%.1f")
         CCE[i] = x.number_input("**CCE (%):** ", value = 90.0, step = step ,key = f'CCE{i}', format="%.1f")

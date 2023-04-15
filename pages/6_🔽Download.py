@@ -125,7 +125,7 @@ elif radio == "Illinois":
             st.markdown("""
             <div style ='text-aling: justify;'>
             ❣ L8:          particles not passing through #8 (%) </br>
-            ❣ l8:          particles passing through #8 but not $30 (%) </br>
+            ❣ l8:          particles passing through #8 but not #30 (%) </br>
             ❣ l30:         particles passing through #30 but not #60 (%) </br>
             ❣ l60:         particles passing through #60 (%) </br>
             ❣ TFEV:        Total Fineness Eff. Value (Fineness Index) </br>
