@@ -73,7 +73,7 @@ elif radio == 'Kentucky CSV':
         if cbox:
             st.markdown("""
             <div style ='text-aling: justify;'>
-            ❣ Zero%_eff:           Percent me that is not effective </br>
+            ❣ Zero%_eff:           Percent lime that is not effective </br>
             ❣ Fifty%_eff:          Percent lime  that is 50 percent effecitve </br>
             ❣ Hund%_eff:           Percent lime that is  100 percent effetive </br>
             ❣ RNV:                 Relative Neutralizing Value </br>
