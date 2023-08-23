@@ -150,7 +150,7 @@ if percent_weight=="Lab Results (Percentage)":
 # else, proceed
 st.write("___")
 try:
-    @st.cache
+    #@st.cache_data
     def graph_h():
         if df.shape[0]>1:
             eff_h = 5+(df.shape[0]-5)*0.46

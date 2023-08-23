@@ -81,7 +81,7 @@ if percent_weight == "Manual Analysis":
 
     dfn = df.copy()
     st.markdown("___")
-    @st.cache_data
+    #@st.cache_data
     def graph_h():
         if dfn.shape[0]>1:
             eff_h = 8+(dfn.shape[0]-8)*0.46
@@ -236,7 +236,7 @@ if percent_weight == "Reported Analysis":
     col1.markdown("<h5 style='background-color: white; font-size:35px; text-align: center; color: 	white;'>""</h5>", unsafe_allow_html=True)
 
     col1.markdown("<h4 style='background-color: #0033A0; font-size:25px; text-align: left; color:white;'>Select Lime Sources</h4>", unsafe_allow_html=True)
-    @st.cache_data
+    #@st.cache_data
     def read_Data():
         df = pd.read_csv("IL_Lime_Data.csv")
         df.set_index('Quarry2', inplace=True)
@@ -248,7 +248,7 @@ if percent_weight == "Reported Analysis":
     dfn = df.loc[[i for i in mcb], :]
 
     st.markdown("___")
-    @st.cache_data
+    #@st.cache_data
     def graph_h():
         if dfn.shape[0]>1:
             eff_h = 8+(dfn.shape[0]-8)*0.46
