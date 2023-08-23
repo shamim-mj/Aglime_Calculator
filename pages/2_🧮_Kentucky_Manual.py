@@ -161,7 +161,7 @@ if percent_weight == "Lab Results (Percentage)":
     df['Cost'] = df.Bulk_Rec * df.price
     st.session_state['df'] = df # this is used in downnloads
 st.write("___")
-@st.cache
+@st.cache_data
 def graph_h():
     if df.shape[0]>1:
         eff_h = 5+(df.shape[0]-5)*0.46

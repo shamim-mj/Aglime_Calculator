@@ -164,7 +164,7 @@ if percent_weight == "Lab Results (Percentage)":
     st.session_state['df_oh'] = df
 
 st.markdown("___")
-@st.cache
+@st.cache_data
 def graph_h():
     if df.shape[0]>1:
         eff_h = 8+(df.shape[0]-8)*0.46
