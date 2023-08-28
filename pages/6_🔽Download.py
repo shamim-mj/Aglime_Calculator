@@ -32,7 +32,8 @@ if radio == 'Kentucky Manual':
     else:
         df = st.session_state['df']
         df = round(df, 2)
-        AgGrid(df.loc[:, ['Quarry', 'Zero%_eff', 'Fifty%_eff', 'Hund%_eff', "RNV", 'Bulk_Rec', 'Cost']], columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        #AgGrid(df.loc[:, ['Quarry', 'Zero%_eff', 'Fifty%_eff', 'Hund%_eff', "RNV", 'Bulk_Rec', 'Cost']], columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        st.dataframe(df.loc[:, ['Quarry', 'Zero%_eff', 'Fifty%_eff', 'Hund%_eff', "RNV", 'Bulk_Rec', 'Cost']])
         st.caption("**:blue[This dataframe is interactive. You can scroll left-to-right, top-to-bottom, freez columns, and filter them. Please download the file before navigating to another menu. You will lose the data otherwise!]**")
         cbox = st.checkbox('Descriptions')
         if cbox:
@@ -66,7 +67,8 @@ elif radio == 'Kentucky CSV':
         df = st.session_state['df_up']
         df = round(df, 2)
         # st.dataframe((df.set_index('Quarry').style.format("{:.2f}")))
-        AgGrid(df.loc[:, ['Quarry', 'Zero%_eff', 'Fifty%_eff', 'Hund%_eff', "RNV", 'Bulk_Rec', 'Cost']], columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        #AgGrid(df.loc[:, ['Quarry', 'Zero%_eff', 'Fifty%_eff', 'Hund%_eff', "RNV", 'Bulk_Rec', 'Cost']], columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        st.dataframe(df.loc[:, ['Quarry', 'Zero%_eff', 'Fifty%_eff', 'Hund%_eff', "RNV", 'Bulk_Rec', 'Cost']])
         st.session_state['downloaded_data'] = df
         st.caption("**:blue[This dataframe is interactive. You can scroll left-to-right, top-to-bottom, freez columns, and filter them. Please download the file before navigating to another menu. You will lose the data otherwise!]**")
         cbox = st.checkbox('Descriptions')
@@ -87,7 +89,8 @@ elif radio == "Ohio":
     else:
         df = st.session_state['df_oh']
         df = round(df,2)
-        AgGrid(round(df.loc[:,['Quarry','FI', "%_ENP", "t_ENP", "Bulk_Rec", "Cost"]], 2),  columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        #AgGrid(round(df.loc[:,['Quarry','FI', "%_ENP", "t_ENP", "Bulk_Rec", "Cost"]], 2),  columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        st.dataframe(df.loc[:,['Quarry','FI', "%_ENP", "t_ENP", "Bulk_Rec", "Cost"]])
         cbox = st.checkbox('Descriptions')
         if cbox:
             st.markdown("""
@@ -119,7 +122,8 @@ elif radio == "Illinois":
     else:
         df = st.session_state['df_IL']
         df = round(df,2)
-        AgGrid(round(df.loc[:,['Quarry', 'L8', 'l8', 'l30','l60', "TFEV","ENV" ,'Bulk_Rec', 'Cost']], 2),  columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        #AgGrid(round(df.loc[:,['Quarry', 'L8', 'l8', 'l30','l60', "TFEV","ENV" ,'Bulk_Rec', 'Cost']], 2),  columns_auto_size_mode='FIT_ALL_COLUMNS_TO_VIEW', theme='alpine')
+        st.dataframe(df.loc[:,['Quarry', 'L8', 'l8', 'l30','l60', "TFEV","ENV" ,'Bulk_Rec', 'Cost']])
         cbox = st.checkbox('Descriptions')
         if cbox:
             st.markdown("""
